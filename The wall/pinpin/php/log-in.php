@@ -1,28 +1,21 @@
 <?php
-//Login process
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    session_start();
+    include 'db.php';
 
-//sql injection protection
-$email = $mysqli->escape_string($_POST['email']);
-$result = $mysqli->query("SELECT * FROM users WHERE email='$email'");
+    $user = filter_var($_POST['user_name'], FILTER_SANITIZE_STRING);
+    $pwd = filter_var($_POST['pwd'], FILTER_SANITIZE_STRING);
 
-if($result->num_rows == 0) { // user doesnt exist
-  $_SESSION['message'] = "User with that email doesn't exist!";
-  header("location: error.php")
-} else { // user exists
-  $user = $result->fetch_assoc();
+    $sql = "SELECT * FROM `users` WHERE `user_name` = ?";
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([$user]);
+    $user = $statement->fetch();
 
-  if(password_verify($_POST['password'], $user['password'])) {
-    $_SESSION['email'] = $user['email'];
-    $_SESSION['first_name'] = $user['first_name'];
-    $_SESSION['last_name'] = $user['last_name'];
-    $_SESSION['active'] = $user['active'];
-
-    $_SESSION['logged_in'] = true;
-
-    header("location: yourwall.php");
+    if(password_verify($pwd, $user['pwd'])){
+      $_SESSION['user_id'] = $user['id'];
+      print_r($_SESSION);
+    }
   } else {
-    $_SESSION['message'] = "You have entered wrong password, try again!"
-    header("location: error.php");
+      echo "Failed login";
   }
-}
 ?>

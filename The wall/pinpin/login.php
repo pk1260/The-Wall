@@ -1,6 +1,5 @@
 <?php
 require 'php/db.php';
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +9,7 @@ session_start();
   <title>PINPIN.INC</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Pascal Kuiper 12851 || ">
+  <meta name="author" content="Pascal Kuiper 18251 || ">
   <meta name="copyright" content="Pascal Kuiper PinPin.Inc" />
   <meta name="keywords" content="Wall, MessageBoard, Pintrest" />
   <link rel="stylesheet" href="css/style.css">
@@ -22,9 +21,9 @@ session_start();
 
   <?php
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
-      if(inset($_POST['login'])) { //user loggin in
+      if(isset($_POST['login'])) { //user loggin in
         require 'log-in.php';
-      } elseif(inset($_POST['register'])) {
+      } elseif(isset($_POST['register'])) {
         require 'sign-in.php';
       }
     }
@@ -57,20 +56,20 @@ session_start();
           <div class="login-page">
             <div class="form-2">
 
-              <form class="register-form" action="" method="post">
-                <input type="text" placeholder="user name" />
-                <input type="text" placeholder="first name" />
-                <input type="text" placeholder="last name" />
-                <input type="text" placeholder="email address" />
-                <input type="password" placeholder="password" />
-                <input class="sign" type="submit" name="" value="SIGN UP">
+              <form class="register-form" action="php/hash.php" method="post">
+                <input type="text" placeholder="user name" minlength="2" name="uid"/>
+                <input type="text" placeholder="first name" minlength="2" name="first_name"/>
+                <input type="text" placeholder="last name" minlength="2" name="last_name"/>
+                <input type="email" placeholder="email address" minlength="2" name="email"/>
+                <input type="password" placeholder="password" minlength="2" name="psw"/>
+                <input class="sign" type="submit" name="submit" value="SIGN UP">
                 <p class="message"><a href="#">forgoten password?</a></p>
                 <p class="message">Already registered? <a href="#">Sign In</a></p>
               </form>
 
-              <form class="login-form-2" action="" method="post">
-                <input type="text" placeholder="email" />
-                <input type="password" placeholder="password" />
+              <form class="login-form-2" action="" method="POST">
+                <input type="text" placeholder="email" minlength="2" />
+                <input type="password" placeholder="password" minlength="2" />
                 <button class="sign-2">login</button>
               </form>
 
